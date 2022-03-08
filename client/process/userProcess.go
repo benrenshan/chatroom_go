@@ -1,15 +1,20 @@
-package main
+package process
 
 import (
 	"chatroom_demo/common/message"
+	"chatroom_demo/server/utils"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"net"
 )
+type UserProcess struct {
+	//封装—工厂模式
 
-//login 完成登录校验,把ID和密码传过来
-func login(userID int, userPwd string)(err error){
+}
+
+//Login 完成登录校验,把ID和密码传过来
+func (this *UserProcess) Login(userID int, userPwd string)(err error){
 
 	//fmt.Printf("userID = %d userPwd = %s",userID,userPwd)
 	//return nil
@@ -19,6 +24,7 @@ func login(userID int, userPwd string)(err error){
 		fmt.Println("net.Dial err = ",err)
 		return
 	}
+	defer conn.Close()
 	//准备通过conn发送消息给服务器
 	var mes message.Message  //定义一个需要序列化的mes
 	mes.Type = message.LoginResMesType //类型就是字符型常量
@@ -40,8 +46,6 @@ func login(userID int, userPwd string)(err error){
 		fmt.Println("json.Marshal err= ", err)
 		return
 	}
-	//延时关闭
-	defer conn.Close()
 	//data就是我们要发送的消息
 	//先把data的长度发送给服务器
 	//由于conn.Write里面只能写入byte类型的数据所以要把它转成byte
@@ -68,16 +72,28 @@ func login(userID int, userPwd string)(err error){
 	//time.Sleep(20*time.Second)
 	//fmt.Println("休眠")
 	//返回的消息
-	mes,err = readPkg(conn)
+	//创建一个Transfer实例
+	tf := &utils.Transfer{
+		Conn : conn,
+	}
+	mes,err = tf.ReadPkg()
 	if err != nil{
 		fmt.Println("readPkg(conn) err=", err)
+		return
 	}
 	//将mes的Data部分反序列化 LoginResMes
 	var loginResMes message.LoginResMes
 	err = json.Unmarshal([]byte(mes.Data), &loginResMes)
 	if loginResMes.Code == 200{
 		fmt.Println("登录成功")
-	}else if loginResMes.Code == 500{
+
+		go serverProcessMes(conn)
+
+		for{
+			ShowMenu()
+
+		}
+	}else{
 		fmt.Println(loginResMes.Error)
 	}
 	return

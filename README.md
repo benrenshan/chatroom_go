@@ -2,6 +2,11 @@
 A small project for a simple chatroom using golang.
 
 # 项目编码流程的设计分析
+
+通讯逻辑示意图
+
+![image-20220307161752440](C:\Users\syt\AppData\Roaming\Typora\typora-user-images\image-20220307161752440.png)
+
 ## 客户端部分
 ### 客户端登录功能
 1.接收的输入id和密码
