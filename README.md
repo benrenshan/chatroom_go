@@ -5,7 +5,7 @@ A small project for a simple chatroom using golang.
 
 通讯逻辑示意图
 
-![image-20220307161752440](C:\Users\syt\AppData\Roaming\Typora\typora-user-images\image-20220307161752440.png)
+![image](https://github.com/benrenshan/chartroom_go/blob/main/projectImg/Coding%20Process.png)
 
 ## 客户端部分
 ### 客户端登录功能
