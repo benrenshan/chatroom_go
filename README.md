@@ -1,4 +1,4 @@
-# chartroom_go
+# chatroom_go
 A small project for a simple chatroom using golang.
 
 # 项目编码流程的设计分析
